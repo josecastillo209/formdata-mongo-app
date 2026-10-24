@@ -18,5 +18,22 @@
   <br/>
   <input type="submit" value="Go"/>
 </form>
+
+<!-- New section for displaying database accounts -->
+    <div id="accounts-section">
+      <h2>Customer Accounts in Database</h2>
+      <% if (typeof customers !== 'undefined' && customers.length > 0) { %>
+        <ul>
+          <% customers.forEach(function(customer) { %>
+            <li>
+              <strong>Name:</strong> <%= customer.name %> | 
+              <strong>Email:</strong> <%= customer.email %>
+            </li>
+          <% }); %>
+        </ul>
+      <% } else { %>
+        <p>No customer accounts loaded yet.</p>
+      <% } %>
+    </div>
 </body>
 </html>

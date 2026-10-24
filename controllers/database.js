@@ -84,3 +84,29 @@ async function saveCustomerToMongoDB(name, email) {
     await client.close();
     }
 }
+
+// 1. Helper function that queries MongoDB for all saved customer documents
+async function getAllCustomersFromMongoDB() {
+  const client = new MongoClient(uri, { serverApi: ServerApiVersion.v1 });
+  try {
+    await client.connect();
+    const database = client.db("shoppingsite");
+    const customers = database.collection("customers");
+    return await customers.find({}).toArray();
+  } finally {
+    await client.close();
+  }
+}
+
+// 2. Controller function that fetches the list and sends it to views/index.ejs
+module.exports.getAllCustomers = async (req, res, next) => {
+  try {
+    const customerList = await getAllCustomersFromMongoDB();
+    res.render('index', {
+      title: 'ReadFormDataSaveMongoDB',
+      customers: customerList
+    });
+  } catch (err) {
+    next(err);
+  }
+};
